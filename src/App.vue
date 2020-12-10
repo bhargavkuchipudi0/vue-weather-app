@@ -42,5 +42,19 @@ body {
   max-width: 1100px;
   margin: 0 auto;
 }
+.heading {
+    text-align: left;
+    position: relative;
+    width: max-content;
+}
+.heading::after {
+    position: absolute;
+    content: "";
+    top: 10px;
+    right: -120px;
+    width: 100px;
+    height: 1px;
+    background-color: #FFFFFF;
+}
 
 </style>

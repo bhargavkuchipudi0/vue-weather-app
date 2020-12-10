@@ -9,7 +9,7 @@
           <FeelsLike />
         </div>
         <p class="art-txt">Feels like</p>
-        <p class="art-num">{{ currentWeather.feels_like }}<sup>o</sup> F</p>
+        <p class="art-num">{{ Math.floor(currentWeather.feels_like) }}<sup>o</sup> F</p>
       </article>
       <article class="art">
         <div class="art-img">
@@ -90,24 +90,9 @@ export default {
 
 <style scoped>
 .details {
-  padding: 10px 20px;
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
-}
-.heading {
-  text-align: left;
-}
-.section-heading {
-  position: relative;
-}
-.section-heading::after {
-  position: absolute;
-  content: "";
-  top: 10px;
-  left: 70px;
-  width: 140px;
-  height: 1px;
-  background-color: var(--white);
 }
 .details-grid {
   display: grid;

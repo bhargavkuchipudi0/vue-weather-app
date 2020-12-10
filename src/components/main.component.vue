@@ -17,8 +17,12 @@
         </div>
       </div>
       <div class="main-bot">
-        <div class="bot-left"></div>
-        <div class="bot-right"></div>
+        <div class="bot-left">
+          <ForeCastHours :hourly-data="hourly"/>
+        </div>
+        <div class="bot-right">
+          <ForeCastDays :daily-data="daily"/>
+        </div>
       </div>
     </div>
   </div>
@@ -28,12 +32,16 @@
 import RegionComponent from "./region.component.vue";
 import DetailsComponent from "./details.component.vue";
 import sharedService from "../shared.service";
+import ForeCastHours from './forecast-hours.component.vue';
+import ForeCastDays from './forecast-days.component.vue';
 
 export default {
   name: "MainComponent",
   components: {
     RegionComponent,
     DetailsComponent,
+    ForeCastHours,
+    ForeCastDays
   },
   data() {
     return {
@@ -117,5 +125,15 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex: 0.5;
+}
+.top-right {
+  flex: 0.5;
+}
+.main-bot {
+  margin-top: 30px;
+}
+.bot-left, .bot-right {
+  flex: 1;
 }
 </style>
