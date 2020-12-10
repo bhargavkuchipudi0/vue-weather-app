@@ -25,7 +25,7 @@ export default {
     data() {
         return {
             weekdata: [],
-            day: ['sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
+            day: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
         }
     },
     watch: {
@@ -40,7 +40,7 @@ export default {
                 hsh.lTemp = obj.temp.min;
                 this.weekdata.push(hsh);
             });
-            console.log(this.weekdata);
+            this.weekdata[0].day = 'Today';
         }
     }
 }

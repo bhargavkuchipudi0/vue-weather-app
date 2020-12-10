@@ -16,7 +16,7 @@
           <Wind />
         </div>
         <p class="art-txt">Wind</p>
-        <p class="art-num">{{ currentWeather.wind_speed }} m/h</p>
+        <p class="art-num">{{ currentWeather.wind_speed }} mph</p>
       </article>
       <article class="art">
         <div class="art-img">
@@ -37,7 +37,7 @@
           <Visibility />
         </div>
         <p class="art-txt">Visibility</p>
-        <p class="art-num">{{ currentWeather.visibility }}</p>
+        <p class="art-num">{{ Math.floor(currentWeather.visibility/100) }}%</p>
       </article>
       <article class="art">
         <div class="art-img">

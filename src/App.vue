@@ -61,7 +61,7 @@ body {
     max-width: 80vw;
   }
   .heading::after {
-    widows: 80px;
+    widows: 50px;
   }
 }
 </style>

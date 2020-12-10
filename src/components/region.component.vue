@@ -13,8 +13,8 @@
       </div>
     </div>
     <div class="high-low">
-      <p class="high">Sun Raise - {{sunRaise}}</p>
-      <p class="low">Sun Set - {{sunSet}}</p>
+      <p class="high" v-if="!am">Sunrise - {{sunRaise}}</p>
+      <p class="low" v-if="am">Sunset - {{sunSet}}</p>
     </div>
   </div>
 </template>
@@ -38,6 +38,7 @@ export default {
       let date = new Date(timestamp);
       let hours = date.getHours();
       let shift = hours > 11 ? 'PM' : 'AM';
+      this.am = shift === 'AM' ? true : false;
       let minutes = date.getMinutes();
       if (hours > 12 && hours <= 23) {
         hours -= 12;
