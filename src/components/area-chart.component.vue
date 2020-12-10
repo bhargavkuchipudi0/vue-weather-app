@@ -13,7 +13,8 @@ export default {
     data() {
         return {
             label: [],
-            data: []
+            data: [],
+            chart: {}
         }
     },
     watch: {
@@ -27,7 +28,8 @@ export default {
     methods: {
         renderChart() {
             if (!this.label.length || !this.data.length) return;
-            const ctx = document.getElementById('area-chart').getContext('2d');
+            const canvas = document.getElementById('area-chart');
+            const ctx = canvas.getContext('2d');
             var gradient = ctx.createLinearGradient(0, 0, 0, 400);
 
             gradient.addColorStop(0, 'rgba(255, 255,255, 1)');
@@ -50,8 +52,7 @@ export default {
                 }
             });
             const min = Math.min(...this.data), max = Math.max(...this.data);
-            console.log(min, max);
-            new Chart(ctx, {
+            this.chart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: this.label,
@@ -65,7 +66,7 @@ export default {
                     ]
                 },
                 options: {
-                    responsive: false,
+                    responsive: true,
                     maintainAspectRatio: false,
                     showAllTooltips: true,
                     legend: {
