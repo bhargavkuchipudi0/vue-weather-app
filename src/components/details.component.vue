@@ -97,7 +97,7 @@ export default {
 .details-grid {
   display: grid;
   grid-template-columns: repeat(3, 150px);
-  justify-content: center;
+  justify-content: flex-start;
   grid-gap: 15px;
   padding-top: 30px;
 }
@@ -124,6 +124,7 @@ export default {
 @media only screen and (max-width: 600px) {
   .details-grid {
     grid-template-columns: repeat(2, 120px);
+    justify-content: center;
   }
 }
 </style>

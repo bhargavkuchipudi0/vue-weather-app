@@ -58,7 +58,10 @@ body {
 }
 @media only screen and (max-width: 600px) {
   .container {
-    max-width: 90vw;
+    max-width: 80vw;
+  }
+  .heading::after {
+    widows: 80px;
   }
 }
 </style>

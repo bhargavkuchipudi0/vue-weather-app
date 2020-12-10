@@ -74,4 +74,7 @@ export default {
     height: 1px;
     background-color: #FFFFFF;
 }
+.fh-graph {
+    overflow-x: auto;
+}
 </style>

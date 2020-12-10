@@ -79,6 +79,7 @@ export default {
     .fd-gig-cont {
         flex-wrap: wrap;
         justify-content: center;
+        margin-top: 20px;
     }
     .fd-gig {
         margin: 5px 5px;

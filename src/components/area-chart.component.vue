@@ -65,7 +65,7 @@ export default {
                     ]
                 },
                 options: {
-                    responsive: true,
+                    responsive: false,
                     maintainAspectRatio: false,
                     showAllTooltips: true,
                     legend: {
@@ -74,7 +74,7 @@ export default {
                     layout: {
                         padding: {
                             top: 40,
-                            right: 80,
+                            right: 40,
                             bottom: 40
                         }
                     },
