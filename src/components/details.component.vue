@@ -30,7 +30,7 @@
           <Pressure />
         </div>
         <p class="art-txt">Pressure</p>
-        <p class="art-num">{{ currentWeather.pressure }}</p>
+        <p class="art-num">{{ currentWeather.pressure }} MB</p>
       </article>
       <article class="art">
         <div class="art-img">
@@ -97,6 +97,7 @@ export default {
 .details-grid {
   display: grid;
   grid-template-columns: repeat(3, 150px);
+  justify-content: center;
   grid-gap: 15px;
   padding-top: 30px;
 }
@@ -118,5 +119,11 @@ export default {
 }
 .art-txt {
   margin: 10px 0;
+}
+
+@media only screen and (max-width: 600px) {
+  .details-grid {
+    grid-template-columns: repeat(2, 120px);
+  }
 }
 </style>

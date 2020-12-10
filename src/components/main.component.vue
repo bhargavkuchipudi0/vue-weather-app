@@ -119,21 +119,26 @@ export default {
 .main-bot {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
 }
 .top-left {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 0.5;
+  flex: 1;
 }
 .top-right {
-  flex: 0.5;
+  flex: 1;
 }
 .main-bot {
   margin-top: 30px;
 }
 .bot-left, .bot-right {
   flex: 1;
+}
+
+@media only screen and (max-width: 600px) {
+  .main-top, .main-bot {
+    flex-direction: column;
+  }
 }
 </style>

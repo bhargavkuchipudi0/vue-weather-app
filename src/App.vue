@@ -56,5 +56,9 @@ body {
     height: 1px;
     background-color: #FFFFFF;
 }
-
+@media only screen and (max-width: 600px) {
+  .container {
+    max-width: 90vw;
+  }
+}
 </style>

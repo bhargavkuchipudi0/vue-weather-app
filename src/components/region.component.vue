@@ -112,4 +112,14 @@ export default {
 .high, .low {
   margin: 5px 0;
 }
+
+@media only screen and (max-width: 600px) {
+  .cloud img {
+    width: 100px;
+    height: 100px;
+  }
+  .temp-big {
+    font-size: 27px;
+  }
+}
 </style>

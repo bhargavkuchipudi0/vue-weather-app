@@ -74,4 +74,14 @@ export default {
     width: 35px;
     height: 35px;
 }
+
+@media only screen and (max-width: 600px) {
+    .fd-gig-cont {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .fd-gig {
+        margin: 5px 5px;
+    }
+}
 </style>
