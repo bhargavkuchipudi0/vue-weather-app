@@ -16,6 +16,8 @@ export default {
 :root {
   --font-sans: 'Open Sans', sans-serif;
   --white: #dddddd;
+  --black: #000000;
+  --light-black: #414141;
   --light-white: rgba(255, 255, 255, 0.21);
   --bg-night: linear-gradient(180deg, #13225A 0%, #644986 65%,
  #9561A1 100%);

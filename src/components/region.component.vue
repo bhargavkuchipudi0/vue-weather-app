@@ -2,6 +2,7 @@
   <div class="region">
     <div class="place-time">
       <h1 class="place">{{locationDetails.city}}, {{locationDetails.region}}</h1>
+      <h2 class="country">{{locationDetails.country}}</h2>
       <p class="time">{{date}}</p>
     </div>
     <div class="cloud-temp">
@@ -83,6 +84,7 @@ export default {
   margin: 10px 0;
 }
 .place {
+  text-transform: capitalize;
   font-weight: 400;
 }
 .time {

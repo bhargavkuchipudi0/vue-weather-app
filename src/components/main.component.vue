@@ -1,27 +1,47 @@
 <template>
-  <div class="container">
     <div class="search">
-      <input
-        class="search-bar"
-        type="text"
-        placeholder="Search for a place.. Ex: New York"
-      />
+      <div class="search-cont">
+        <input
+          class="search-bar"
+          type="text"
+          placeholder="Search for a place.. Ex: New York"
+          v-model="searchInput"
+        />
+        <button class="search-btn" @click="searchPlace">Go</button>
+        <div class="search-results">
+          <ul class="result-ul">
+            <li
+              class="result-li"
+              v-for="item in searchResults"
+              v-bind:key="item"
+              @click="updateLocation(item)"
+            >
+              <p class="li-place">{{ searchInput }} {{ item.state }}</p>
+              <p class="li-country">{{ item.country }}</p>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
+  <div class="container">
     <div class="main-holder">
       <div class="main-top">
         <div class="top-left">
-          <RegionComponent :location-details="locationDetails" :current-weather="current"/>
+          <RegionComponent
+            :location-details="locationDetails"
+            :current-weather="current"
+          />
         </div>
         <div class="top-right">
-          <DetailsComponent :current-weather="current"/>
+          <DetailsComponent :current-weather="current" />
         </div>
       </div>
       <div class="main-bot">
         <div class="bot-left">
-          <ForeCastHours :hourly-data="hourly"/>
+          <ForeCastHours :hourly-data="hourly" />
         </div>
         <div class="bot-right">
-          <ForeCastDays :daily-data="daily"/>
+          <ForeCastDays :daily-data="daily" />
         </div>
       </div>
     </div>
@@ -32,8 +52,8 @@
 import RegionComponent from "./region.component.vue";
 import DetailsComponent from "./details.component.vue";
 import sharedService from "../shared.service";
-import ForeCastHours from './forecast-hours.component.vue';
-import ForeCastDays from './forecast-days.component.vue';
+import ForeCastHours from "./forecast-hours.component.vue";
+import ForeCastDays from "./forecast-days.component.vue";
 
 export default {
   name: "MainComponent",
@@ -41,7 +61,7 @@ export default {
     RegionComponent,
     DetailsComponent,
     ForeCastHours,
-    ForeCastDays
+    ForeCastDays,
   },
   data() {
     return {
@@ -51,13 +71,15 @@ export default {
       },
       location: {
         lat: 0,
-        lon: 0
+        lon: 0,
       },
       current: {
         temp: 0,
       },
       daily: [],
-      hourly: []
+      hourly: [],
+      searchInput: "",
+      searchResults: [],
     };
   },
   methods: {
@@ -67,6 +89,7 @@ export default {
           this.locationDetails = {
             city: response.city,
             region: response.region,
+            country: response.country
           };
           const loc = response.loc.split(",");
           this.location.lat = loc[0];
@@ -90,6 +113,37 @@ export default {
         }
       );
     },
+    searchPlace: function () {
+      sharedService.getLocationByName(this.searchInput).then(
+        (response) => {
+          console.log(response);
+          if (response.status === 200) {
+            this.searchResults = response.data.results
+              .filter((obj) => obj.components._category === "place")
+              .map((obj) => {
+                return { ...obj.components, ...obj.geometry };
+              });
+            console.log(this.searchResults);
+          } else {
+            console.log("error");
+          }
+        },
+        (error) => {
+          console.log("something wrong with opencagedata api", error);
+        }
+      );
+    },
+    updateLocation: function (location) {
+      this.location = {lat: location.lat, lon: location.lng};
+      this.locationDetails = {
+        city: this.searchInput,
+        region: location.state,
+        country: location.country
+      };
+      this.getWeatherDetails();
+      this.searchInput = "";
+      this.searchResults = [];
+    },
   },
   mounted() {
     this.getCurrentLocation(() => {
@@ -102,13 +156,34 @@ export default {
 <style scoped>
 .search {
   padding-top: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.search-cont {
+  position: relative;
 }
 .search-bar {
   width: 250px;
   height: 30px;
-  border-radius: 7px;
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
   border: none;
-  padding: 5px 10px;
+  padding: 0 10px;
+  outline: none;
+}
+.search-btn {
+  width: 40px;
+  height: 30px;
+  border: none;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  cursor: pointer;
+  color: var(--white);
+  background-color: #eb6e4b;
+  outline: none;
 }
 .main-holder {
   display: flex;
@@ -132,12 +207,44 @@ export default {
 .main-bot {
   margin-top: 30px;
 }
-.bot-left, .bot-right {
+.bot-left,
+.bot-right {
   flex: 1;
+}
+.search-results {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1;
+  border-radius: 7px;
+}
+.result-ul {
+  list-style-type: none;
+  background-color: #ffffff;
+}
+.result-li {
+  width: 100%;
+  padding: 5px;
+  color: var(--light-black);
+  text-align: left;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--white);
+  cursor: pointer;
+}
+.li-place {
+  font-size: 12px;
+}
+.li-country {
+  font-size: 14px;
+  color: var(--black);
 }
 
 @media only screen and (max-width: 600px) {
-  .main-top, .main-bot {
+  .main-top,
+  .main-bot {
     flex-direction: column;
   }
 }
