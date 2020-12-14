@@ -16,7 +16,7 @@
               v-bind:key="item"
               @click="updateLocation(item)"
             >
-              <p class="li-place">{{ searchInput }} {{ item.state }}</p>
+              <p class="li-place">{{ searchInput }}, {{ item.state }}</p>
               <p class="li-country">{{ item.country }}</p>
             </li>
           </ul>
@@ -66,15 +66,28 @@ export default {
   data() {
     return {
       locationDetails: {
-        city: "New York",
-        region: "NYC",
+        city: '',
+        region: '',
+        country: ''
       },
       location: {
         lat: 0,
         lon: 0,
       },
       current: {
-        temp: 0,
+        clouds: '',
+        dew_point: '',
+        dt: '',
+        feels_like: '',
+        humidity: '',
+        offsetTime: '',
+        pressure: '',
+        sunrise: '',
+        sunset: '',
+        temp: '',
+        uvi: '',
+        visibility: '',
+        timezone_offset:''
       },
       daily: [],
       hourly: [],
@@ -89,7 +102,7 @@ export default {
           this.locationDetails = {
             city: response.city,
             region: response.region,
-            country: response.country
+            country: response.country,
           };
           const loc = response.loc.split(",");
           this.location.lat = loc[0];
@@ -104,7 +117,10 @@ export default {
     getWeatherDetails() {
       sharedService.getForeCast(this.location).then(
         (response) => {
-          this.current = response.current;
+          this.current = {
+            ...response.current,
+            timezone_offset: response.timezone_offset
+          }
           this.daily = response.daily;
           this.hourly = response.hourly;
         },
@@ -116,14 +132,13 @@ export default {
     searchPlace: function () {
       sharedService.getLocationByName(this.searchInput).then(
         (response) => {
-          console.log(response);
           if (response.status === 200) {
+            console.log(response.data);
             this.searchResults = response.data.results
               .filter((obj) => obj.components._category === "place")
               .map((obj) => {
                 return { ...obj.components, ...obj.geometry };
               });
-            console.log(this.searchResults);
           } else {
             console.log("error");
           }
@@ -168,8 +183,6 @@ export default {
 .search-bar {
   width: 250px;
   height: 30px;
-  border-top-left-radius: 7px;
-  border-bottom-left-radius: 7px;
   border: none;
   padding: 0 10px;
   outline: none;
@@ -178,8 +191,6 @@ export default {
   width: 40px;
   height: 30px;
   border: none;
-  border-top-right-radius: 7px;
-  border-bottom-right-radius: 7px;
   cursor: pointer;
   color: var(--white);
   background-color: #eb6e4b;
@@ -213,13 +224,12 @@ export default {
 }
 .search-results {
   position: absolute;
-  top: 30px;
+  top: 32px;
   left: 0;
   width: 100%;
   max-height: 400px;
   overflow-y: auto;
   z-index: 1;
-  border-radius: 7px;
 }
 .result-ul {
   list-style-type: none;
@@ -227,19 +237,22 @@ export default {
 }
 .result-li {
   width: 100%;
-  padding: 5px;
+  padding: 5px 10px;
   color: var(--light-black);
   text-align: left;
   box-sizing: border-box;
   border-bottom: 1px solid var(--white);
   cursor: pointer;
 }
+.li-place, .li-country {
+  margin: 3px 0;
+}
 .li-place {
   font-size: 12px;
+  color: var(--black);
 }
 .li-country {
   font-size: 14px;
-  color: var(--black);
 }
 
 @media only screen and (max-width: 600px) {

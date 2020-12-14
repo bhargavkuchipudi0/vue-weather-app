@@ -3,7 +3,7 @@
     <div class="place-time">
       <h1 class="place">{{locationDetails.city}}, {{locationDetails.region}}</h1>
       <h2 class="country">{{locationDetails.country}}</h2>
-      <p class="time">{{date}}</p>
+      <p class="time">{{getDate(currentWeather.dt, currentWeather.timezone_offset)}}</p>
     </div>
     <div class="cloud-temp">
       <div class="cloud">
@@ -14,8 +14,7 @@
       </div>
     </div>
     <div class="high-low">
-      <p class="high" v-if="!am">Sunrise - {{sunRaise}}</p>
-      <p class="low" v-if="am">Sunset - {{sunSet}}</p>
+      <p class="high">{{processSunRiseSet(currentWeather.dt, currentWeather.sunrise, currentWeather.sunset, currentWeather.timezone_offset)}}</p>
     </div>
   </div>
 </template>
@@ -31,30 +30,38 @@ export default {
     return {
       time: '',
       days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      am: true
     }
   },
   methods: {
-    getTime(timestamp) {
-      let date = new Date(timestamp);
-      let hours = date.getHours();
-      let shift = hours > 11 ? 'PM' : 'AM';
-      this.am = shift === 'AM' ? true : false;
-      let minutes = date.getMinutes();
-      if (hours > 12 && hours <= 23) {
-        hours -= 12;
+    removeSecondsForomTime: function(timestr) {
+      let timearr = timestr.split(' ');
+      let time = timearr[0].split(':').slice(0, 2).join(':');
+      return time + ' ' + timearr[1];
+    },
+    getUTCtime: function(time, offset) {
+      let date = new Date(time*1000);
+      let utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+      return new Date(utc + (offset/3600 * 3600000));
+    },
+    getDate: function(time, offset) {
+      let date = this.getUTCtime(time, offset);
+      return `${this.days[date.getDay()]}, ${this.removeSecondsForomTime(date.toLocaleTimeString())}`
+    },
+    processSunRiseSet: function(time, sunrise, sunset, offset) {
+      let current = this.getUTCtime(time, offset).getTime();
+      let rise = this.getUTCtime(sunrise, offset).getTime();
+      let set = this.getUTCtime(sunset, offset).getTime();
+      console.log(current , rise, set);
+      if (current < rise) {
+        return `Sunrise - ${this.getDate(sunrise, offset).split(',').slice(1).join('')}`
+      } if (current < set) {
+        return `Sunset - ${this.getDate(sunset, offset).split(',').slice(1).join('')}`
+      } else {
+        return '';
       }
-      if (minutes < 10) {
-        minutes = `0${minutes}`
-      }
-      return `${hours}:${minutes} ${shift}`
     }
   },
   computed: {
-    date: function() {
-      let date = new Date();
-      return `${this.days[date.getDay()]}, ${this.getTime(Date.now())}`
-    },
     img: function() {
       if (this.currentWeather.weather) {
         return require(`../assets/${this.currentWeather.weather[0].icon}.png`);
@@ -63,10 +70,10 @@ export default {
       }
     },
     sunRaise: function() {
-      return this.getTime(this.currentWeather.sunrise*1000);
+      return this.getDate(this.currentWeather.sunrise, this.currentWeather.timezone_offset);
     },
     sunSet: function() {
-      return this.getTime(this.currentWeather.sunset*1000);
+      return this.getDate(this.currentWeather.sunset, this.currentWeather.timezone_offset);
     }
   },
 }
