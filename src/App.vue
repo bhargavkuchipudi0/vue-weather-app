@@ -26,7 +26,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 body {
   background: var(--bg-night);

@@ -51,7 +51,6 @@ export default {
       let current = this.getUTCtime(time, offset).getTime();
       let rise = this.getUTCtime(sunrise, offset).getTime();
       let set = this.getUTCtime(sunset, offset).getTime();
-      console.log(current , rise, set);
       if (current < rise) {
         return `Sunrise - ${this.getDate(sunrise, offset).split(',').slice(1).join('')}`
       } if (current < set) {

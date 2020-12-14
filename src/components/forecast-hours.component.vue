@@ -7,7 +7,7 @@
 
         </div>
         <div class="fh-graph">
-            <AreaChart :chart-data="chartData"/>
+            <AreaChart :chart-data="getChartData(hourlyData)"/>
         </div>
     </div>
 </template>
@@ -20,40 +20,37 @@ export default {
         AreaChart
     },
     props: {
-        hourlyData: Array
+        hourlyData: Array,
+        offsetTime: Number
     },
-    computed: {
-        chartData: function() {
-            let chartData = {
-                label:[],
-                data:[]
-            }
-            this.hourlyData.forEach(data => {
-                chartData.label.push(this.getTime(data.dt));
-                chartData.data.push(Math.floor(data.temp));
-            });
-            return chartData;
+    data() {
+        return {
+            chartData: []
         }
     },
     methods: {
-        toggleGraphData(type='temp') {
-            this.chartData = {
-                label:[],
-                data:[]
-            }
-            this.hourlyData.forEach((data) => {
-                this.chartData.label.push(this.getTime(data.dt));
-                this.chartData.data.push(type === 'temp' ? data.temp : data.cloud);
-            })
-        },
-        getTime(unixTime) {
-            let date = new Date(unixTime*1000);
+        getTime(time, offset) {
+            let date = new Date(time*1000);
+            let utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+            date = new Date(utc + (offset/3600 * 3600000));
             let hour = date.getHours();
             let shift = hour >= 12 && hour <= 23 ? 'pm' : 'am';
             if (hour > 12 && hour <= 23) {
                 hour -= 12
             }
+            if (hour === 0) hour = 12;
             return `${hour}${shift}` 
+        },
+        getChartData: function(hourlyData) {
+            this.chartData = {
+                label:[],
+                data:[]
+            }
+            hourlyData.forEach(data => {
+                this.chartData.label.push(this.getTime(data.dt, this.offsetTime));
+                this.chartData.data.push(Math.floor(data.temp));
+            });
+            return this.chartData;
         }
     }
 }

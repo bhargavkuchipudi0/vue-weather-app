@@ -38,7 +38,7 @@
       </div>
       <div class="main-bot">
         <div class="bot-left">
-          <ForeCastHours :hourly-data="hourly" />
+          <ForeCastHours :hourly-data="hourly" :offset-time="timezone_offset"/>
         </div>
         <div class="bot-right">
           <ForeCastDays :daily-data="daily" />
@@ -93,6 +93,7 @@ export default {
       hourly: [],
       searchInput: "",
       searchResults: [],
+      timezone_offset: 0
     };
   },
   methods: {
@@ -121,6 +122,7 @@ export default {
             ...response.current,
             timezone_offset: response.timezone_offset
           }
+          this.timezone_offset = response.timezone_offset;
           this.daily = response.daily;
           this.hourly = response.hourly;
         },
@@ -133,7 +135,6 @@ export default {
       sharedService.getLocationByName(this.searchInput).then(
         (response) => {
           if (response.status === 200) {
-            console.log(response.data);
             this.searchResults = response.data.results
               .filter((obj) => obj.components._category === "place")
               .map((obj) => {
